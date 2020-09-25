@@ -9,11 +9,11 @@ import (
 
 type (
 	UserRepository interface {
+		All() ([]*models.User, error)
+		FindById(uint32) (*models.User, error)
 		Create(*models.User) (*models.User, error)
 		Update(uint32, *models.User) (*models.User, error)
-		//Delete(uint32) (int, error)
-		All() ([]*models.User, error)
-		//FindById(uint32) (*models.User, error)
+		Delete(uint32) (int64, error)
 	}
 
 	database struct {
@@ -21,7 +21,7 @@ type (
 	}
 )
 
-func NewUserRepository(db *gorm.DB) *database {
+func NewUserRepository(db *gorm.DB) UserRepository {
 	return &database{db}
 }
 
@@ -31,10 +31,18 @@ func (db *database) All() ([]*models.User, error) {
 	return users, err
 }
 
+func (db *database) FindById(id uint32) (*models.User, error) {
+	u := new(models.User)
+	if err := db.conn.Take(u, id).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, echo.ErrNotFound
+	}
+	return u, nil
+}
+
 func (db *database) Create(user *models.User) (*models.User, error) {
 	err := db.conn.Create(user).Error
 	if err != nil {
-		return nil, err
+		return nil, echo.ErrInternalServerError
 	}
 	return user, nil
 }
@@ -54,4 +62,12 @@ func (db *database) Update(id uint32, user *models.User) (*models.User, error) {
 		return nil, echo.ErrInternalServerError
 	}
 	return u, nil
+}
+
+func (db *database) Delete(id uint32) (int64, error) {
+	rs := db.conn.Take(&models.User{}, id).Delete(&models.User{}, id)
+	if errors.Is(rs.Error, gorm.ErrRecordNotFound) {
+		return 0, echo.ErrNotFound
+	}
+	return rs.RowsAffected, nil
 }

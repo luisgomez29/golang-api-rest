@@ -10,9 +10,11 @@ import (
 
 type (
 	UserController interface {
-		Create(c echo.Context) error
 		GetAll(c echo.Context) error
+		FindById(c echo.Context) error
+		Create(c echo.Context) error
 		Update(c echo.Context) error
+		Delete(c echo.Context) error
 	}
 
 	userController struct {
@@ -20,16 +22,29 @@ type (
 	}
 )
 
-func NewUserController(userRepository repositories.UserRepository) *userController {
+func NewUserController(userRepository repositories.UserRepository) UserController {
 	return &userController{userRepository}
 }
 
-func (ctl *userController) GetAll(c echo.Context) error {
+func (ctl userController) GetAll(c echo.Context) error {
 	users, err := ctl.userRepository.All()
 	if err != nil {
 		return err
 	}
 	return c.JSON(http.StatusOK, users)
+}
+
+func (ctl *userController) FindById(c echo.Context) error {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		return echo.ErrBadRequest
+	}
+
+	u, err := ctl.userRepository.FindById(uint32(id))
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, u)
 }
 
 func (ctl *userController) Create(c echo.Context) error {
@@ -61,4 +76,18 @@ func (ctl *userController) Update(c echo.Context) error {
 		return err
 	}
 	return c.JSON(http.StatusOK, user)
+}
+
+func (ctl *userController) Delete(c echo.Context) error {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		return echo.ErrBadRequest
+	}
+
+	rowsAffected, err := ctl.userRepository.Delete(uint32(id))
+
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusNoContent, rowsAffected)
 }

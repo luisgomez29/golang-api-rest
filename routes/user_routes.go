@@ -15,12 +15,14 @@ type (
 	}
 )
 
-func NewUserRoutes(userController controllers.UserController) *userRoutes {
+func NewUserRoutes(userController controllers.UserController) UserRouter {
 	return &userRoutes{userController}
 }
 
 func (ur *userRoutes) UserRouters(e *echo.Group) {
 	e.GET("/users", ur.userController.GetAll)
+	e.GET("/users/:id", ur.userController.FindById)
 	e.POST("/users", ur.userController.Create)
 	e.PUT("/users/:id", ur.userController.Update)
+	e.DELETE("/users/:id", ur.userController.Delete)
 }
