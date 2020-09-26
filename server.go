@@ -14,11 +14,9 @@ func main() {
 	config.Load()
 
 	db := database.Connect()
-	if db != nil {
-		sqlDB, _ := db.DB()
-		defer sqlDB.Close()
-	}
 
+	defer db.Close()
+	db.AddQueryHook(auto.DBLogger{})
 	auto.Load(db)
 
 	userRepository := repositories.NewUserRepository(db)

@@ -61,8 +61,7 @@ func (ctl *userController) Create(c echo.Context) error {
 }
 
 func (ctl *userController) Update(c echo.Context) error {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
-	if err != nil {
+	if _, err := strconv.Atoi(c.Param("id")); err != nil {
 		return echo.ErrBadRequest
 	}
 
@@ -71,7 +70,7 @@ func (ctl *userController) Update(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity)
 	}
 
-	user, err = ctl.userRepository.Update(uint32(id), user)
+	user, err := ctl.userRepository.Update(user)
 	if err != nil {
 		return err
 	}
@@ -84,10 +83,8 @@ func (ctl *userController) Delete(c echo.Context) error {
 		return echo.ErrBadRequest
 	}
 
-	rowsAffected, err := ctl.userRepository.Delete(uint32(id))
-
-	if err != nil {
+	if err := ctl.userRepository.Delete(uint32(id)); err != nil {
 		return err
 	}
-	return c.JSON(http.StatusNoContent, rowsAffected)
+	return c.JSON(http.StatusNoContent, "user deleted successfully")
 }

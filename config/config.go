@@ -19,6 +19,6 @@ func Load() {
 	}
 
 	PORT = os.Getenv("API_PORT")
-	DBURL = fmt.Sprintf("user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=America/Bogota",
+	DBURL = fmt.Sprintf("postgres://%s:%s@localhost:5432/%s",
 		os.Getenv("DB_USER"), os.Getenv("DB_PWD"), os.Getenv("DB_NAME"))
 }

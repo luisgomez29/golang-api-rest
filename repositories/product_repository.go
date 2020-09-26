@@ -1,31 +1,29 @@
 package repositories
 
 import (
+	"github.com/go-pg/pg/v10"
 	"github.com/luisgomez29/golang-api-rest/models"
-	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type (
 	ProductRepository interface {
-		All() ([]*models.User, error)
+		All() ([]*models.Product, error)
 	}
 
 	productDB struct {
-		conn *gorm.DB
+		conn *pg.DB
 	}
 )
 
-func NewProductRepository(db *gorm.DB) ProductRepository {
+func NewProductRepository(db *pg.DB) ProductRepository {
 	return &productDB{db}
 }
 
-func (db *productDB) All() ([]*models.User, error) {
-	var u []*models.User
-	result := db.conn.Debug().Preload(clause.Associations).Where("id >= 1").Order("id desc").Find(&u)
-	//result := db.conn.Debug().Find(&u)
-	if result.Error != nil {
-		return nil, result.Error
+func (db *productDB) All() ([]*models.Product, error) {
+	var u []*models.Product
+	err := db.conn.Model(&u).Column("product.*").Relation("User").Select()
+	if err != nil {
+		panic(err)
 	}
 	return u, nil
 }

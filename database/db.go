@@ -2,18 +2,23 @@ package database
 
 import (
 	"fmt"
+	"github.com/go-pg/pg/v10"
+	"github.com/joho/godotenv"
 	"github.com/luisgomez29/golang-api-rest/config"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
+	"os"
 )
 
-func Connect() *gorm.DB {
+func Connect() *pg.DB {
 	fmt.Println("DB=>", config.DBURL)
-	db, err := gorm.Open(postgres.Open(config.DBURL), &gorm.Config{})
-
+	err := godotenv.Load()
 	if err != nil {
 		log.Fatal(err)
 	}
-	return db
+	return pg.Connect(&pg.Options{
+		Addr:     ":5432",
+		User:     fmt.Sprintf("%s", os.Getenv("DB_USER")),
+		Password: fmt.Sprintf("%s", os.Getenv("DB_PWD")),
+		Database: fmt.Sprintf("%s", os.Getenv("DB_NAME")),
+	})
 }
