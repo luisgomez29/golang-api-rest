@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/labstack/echo/v4"
 	"github.com/luisgomez29/golang-api-rest/models"
+	"github.com/luisgomez29/golang-api-rest/utils"
 	"gorm.io/gorm"
 )
 
@@ -27,13 +28,14 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 func (db *database) All() ([]*models.User, error) {
 	var users []*models.User
-	err := db.conn.Find(&users).Error
-	return users, err
+	db.conn.Select(utils.Fields(&models.User{})).Find(&users)
+	return users, nil
 }
 
 func (db *database) FindById(id uint32) (*models.User, error) {
 	u := new(models.User)
-	if err := db.conn.Take(u, id).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	fields := utils.Fields(&models.User{})
+	if err := db.conn.Select(fields).Take(u, id).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, echo.ErrNotFound
 	}
 	return u, nil
@@ -48,11 +50,10 @@ func (db *database) Create(user *models.User) (*models.User, error) {
 }
 
 func (db *database) Update(id uint32, user *models.User) (*models.User, error) {
-	u := new(models.User)
-	if err := db.conn.Take(u, id).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, echo.ErrNotFound
+	u, err := db.FindById(id)
+	if err != nil {
+		return nil, err
 	}
-
 	u.FirstName = user.FirstName
 	u.LastName = user.LastName
 	u.Email = user.Email

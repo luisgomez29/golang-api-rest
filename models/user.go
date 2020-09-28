@@ -7,13 +7,13 @@ import (
 )
 
 type User struct {
-	ID        uint32    `gorm:"type:serial;primaryKey;auto_increment" json:"id"`
-	FirstName string    `gorm:"not null;size:40" json:"first_name"`
-	LastName  string    `gorm:"not null;size:40;" json:"last_name"`
-	Email     string    `gorm:"not null;size:60;unique" json:"email"`
-	Password  string    `gorm:"not null;size:128" json:"-"`
-	CreatedAt time.Time `gorm:"not null;default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"not null;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID        uint32     `json:"id"`
+	FirstName string     `gorm:"not null;size:40" json:"first_name"`
+	LastName  string     `gorm:"not null;size:40;" json:"last_name"`
+	Email     string     `gorm:"not null;size:60;unique" json:"email,omitempty"`
+	Password  string     `gorm:"not null;size:128" json:"-"`
+	CreatedAt *time.Time `gorm:"not null;default:now()" json:"created_at,omitempty"`
+	UpdatedAt *time.Time `gorm:"not null;default:now()" json:"updated_at,omitempty"`
 }
 
 func (u *User) BeforeSave(*gorm.DB) error {
