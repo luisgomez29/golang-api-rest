@@ -10,5 +10,6 @@ var users = []models.User{
 
 var products = []models.Product{
 	{UserID: 1, Name: "Computador"},
+	{UserID: 1, Name: "Mouse"},
 	{UserID: 2, Name: "Xbox One X"},
 }

@@ -14,6 +14,7 @@ type User struct {
 	Password  string     `gorm:"not null;size:128" json:"-"`
 	CreatedAt *time.Time `gorm:"not null;default:now()" json:"created_at,omitempty"`
 	UpdatedAt *time.Time `gorm:"not null;default:now()" json:"updated_at,omitempty"`
+	Product   []Product  `gorm:"constraint:OnDelete:CASCADE" json:"product,omitempty"`
 }
 
 func (u *User) BeforeSave(*gorm.DB) error {

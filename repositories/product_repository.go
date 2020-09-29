@@ -23,7 +23,7 @@ func NewProductRepository(db *gorm.DB) ProductRepository {
 func (db *productDB) All() ([]*models.Product, error) {
 	var p []*models.Product
 	fields := utils.Fields(&models.Product{})
-	err := db.conn.Debug().Preload("User").Select(fields).Find(&p).Error
+	err := db.conn.Debug().Select(fields).Find(&p).Error
 	if err != nil {
 		return nil, err
 	}
