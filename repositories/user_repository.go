@@ -8,19 +8,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type (
-	UserRepository interface {
-		All() ([]*models.User, error)
-		FindById(uint32) (*models.User, error)
-		Create(*models.User) (*models.User, error)
-		Update(uint32, *models.User) (*models.User, error)
-		Delete(uint32) (int64, error)
-	}
+type UserRepository interface {
+	All() ([]*models.User, error)
+	FindById(uint32) (*models.User, error)
+	Create(*models.User) (*models.User, error)
+	Update(uint32, *models.User) (*models.User, error)
+	Delete(uint32) (int64, error)
+}
 
-	database struct {
-		conn *gorm.DB
-	}
-)
+type database struct {
+	conn *gorm.DB
+}
 
 func NewUserRepository(db *gorm.DB) UserRepository {
 	return &database{db}
@@ -66,7 +64,7 @@ func (db *database) Update(id uint32, user *models.User) (*models.User, error) {
 }
 
 func (db *database) Delete(id uint32) (int64, error) {
-	rs := db.conn.Take(&models.User{}, id).Delete(&models.User{}, id)
+	rs := db.conn.Debug().Select("id").Take(&models.User{}, id).Delete(&models.User{})
 	if errors.Is(rs.Error, gorm.ErrRecordNotFound) {
 		return 0, echo.ErrNotFound
 	}

@@ -6,15 +6,13 @@ import (
 	"net/http"
 )
 
-type (
-	ProductController interface {
-		All(c echo.Context) error
-	}
+type ProductController interface {
+	All(c echo.Context) error
+}
 
-	productController struct {
-		productRepository repositories.ProductRepository
-	}
-)
+type productController struct {
+	productRepository repositories.ProductRepository
+}
 
 func NewProductController(pr repositories.ProductRepository) ProductController {
 	return &productController{pr}

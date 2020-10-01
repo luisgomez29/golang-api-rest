@@ -5,15 +5,13 @@ import (
 	"github.com/luisgomez29/golang-api-rest/controllers"
 )
 
-type (
-	ProductRouter interface {
-		ProductRoutes(e *echo.Group)
-	}
+type ProductRouter interface {
+	ProductRoutes(e *echo.Group)
+}
 
-	productRouter struct {
-		productController controllers.ProductController
-	}
-)
+type productRouter struct {
+	productController controllers.ProductController
+}
 
 func NewProductRouter(pc controllers.ProductController) ProductRouter {
 	return &productRouter{pc}

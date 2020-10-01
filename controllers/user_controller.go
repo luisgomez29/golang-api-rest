@@ -8,19 +8,17 @@ import (
 	"strconv"
 )
 
-type (
-	UserController interface {
-		GetAll(c echo.Context) error
-		FindById(c echo.Context) error
-		Create(c echo.Context) error
-		Update(c echo.Context) error
-		Delete(c echo.Context) error
-	}
+type UserController interface {
+	GetAll(c echo.Context) error
+	FindById(c echo.Context) error
+	Create(c echo.Context) error
+	Update(c echo.Context) error
+	Delete(c echo.Context) error
+}
 
-	userController struct {
-		userRepository repositories.UserRepository
-	}
-)
+type userController struct {
+	userRepository repositories.UserRepository
+}
 
 func NewUserController(userRepository repositories.UserRepository) UserController {
 	return &userController{userRepository}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/labstack/echo/v4"
 	"github.com/luisgomez29/golang-api-rest/auto"
 	"github.com/luisgomez29/golang-api-rest/config"
@@ -10,16 +11,20 @@ import (
 	"github.com/luisgomez29/golang-api-rest/routes"
 )
 
-func main() {
-	config.Load()
+var resetTables = flag.Bool("rt", false, "Reset tables")
 
+func main() {
+	flag.Parse()
+	config.Load()
 	db := database.Connect()
 	if db != nil {
 		sqlDB, _ := db.DB()
 		defer sqlDB.Close()
 	}
 
-	auto.Load(db)
+	if *resetTables {
+		auto.Load(db)
+	}
 
 	userRepository := repositories.NewUserRepository(db)
 	userController := controllers.NewUserController(userRepository)
@@ -30,7 +35,7 @@ func main() {
 	productRouter := routes.NewProductRouter(productController)
 
 	e := echo.New()
-	apiV1 := e.Group("/api/v1.0")
+	apiV1 := e.Group("/api/v1")
 	routes.InitRoutes(apiV1, userRoutes, productRouter)
 	e.Logger.Fatal(e.Start(config.PORT))
 }
