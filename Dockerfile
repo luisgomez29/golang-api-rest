@@ -1,4 +1,4 @@
-FROM golang:1.15
+FROM golang:latest
 RUN mkdir /go/api-rest
 ADD . /go/api-rest
 WORKDIR /go/api-rest
