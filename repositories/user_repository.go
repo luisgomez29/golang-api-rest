@@ -44,7 +44,7 @@ func (db *database) Create(user *models.User) (*models.User, error) {
 	if err != nil {
 		return nil, echo.ErrInternalServerError
 	}
-	user.FirstName = user.FirstName + " " + user.LastName
+	user.FullName = user.FirstName + " " + user.LastName
 	return user, nil
 }
 
