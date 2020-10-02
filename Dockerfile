@@ -1,6 +1,6 @@
 FROM golang:latest
-RUN mkdir /go/api-rest
-ADD . /go/api-rest
-WORKDIR /go/api-rest
+RUN mkdir /api-rest
+ADD . /api-rest
+WORKDIR /api-rest
 RUN go build -o server .
-CMD ["/go/api-rest/server"]
+CMD ["./server", "-rt"]
