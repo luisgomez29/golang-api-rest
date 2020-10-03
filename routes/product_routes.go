@@ -18,5 +18,9 @@ func NewProductRouter(pc controllers.ProductController) ProductRouter {
 }
 
 func (pr *productRouter) ProductRoutes(e *echo.Group) {
-	e.GET("/products", pr.productController.All)
+	e.GET("products", pr.productController.All)
+	e.GET("products/:id", pr.productController.FindById)
+	e.POST("products", pr.productController.Create)
+	e.PUT("products/:id", pr.productController.Update)
+	e.DELETE("products/:id", pr.productController.Delete)
 }

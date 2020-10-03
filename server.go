@@ -31,11 +31,11 @@ func main() {
 	userRoutes := routes.NewUserRoutes(userController)
 
 	productRepository := repositories.NewProductRepository(db)
-	productController := controllers.NewProductController(productRepository)
+	productController := controllers.NewProductController(productRepository, userRepository)
 	productRouter := routes.NewProductRouter(productController)
 
 	e := echo.New()
-	apiV1 := e.Group("/api/v1")
+	apiV1 := e.Group("/api/v1/")
 	routes.InitRoutes(apiV1, userRoutes, productRouter)
 	e.Logger.Fatal(e.Start(config.PORT))
 }

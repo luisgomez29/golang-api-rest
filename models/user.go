@@ -8,9 +8,9 @@ import (
 
 type User struct {
 	ID        uint32     `json:"id"`
-	FirstName string     `gorm:"not null;size:40" json:"first_name"`
-	LastName  string     `gorm:"not null;size:40;" json:"last_name"`
-	FullName  string     `gorm:"-" json:"full_name"`
+	FirstName string     `gorm:"not null;size:40" json:"first_name,omitempty"`
+	LastName  string     `gorm:"not null;size:40;" json:"last_name,omitempty"`
+	FullName  string     `gorm:"-" json:"full_name,omitempty"`
 	Email     string     `gorm:"not null;size:60;unique" json:"email,omitempty"`
 	Password  string     `gorm:"not null;size:128" json:"-"`
 	CreatedAt *time.Time `gorm:"not null;default:now()" json:"created_at,omitempty"`

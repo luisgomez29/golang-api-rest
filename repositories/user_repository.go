@@ -26,7 +26,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 func (db *database) All() ([]*models.User, error) {
 	var users []*models.User
-	db.conn.Select(utils.Fields(&models.User{})).Find(&users)
+	db.conn.Select(utils.Fields(&models.User{})).Limit(100).Find(&users)
 	return users, nil
 }
 
@@ -65,7 +65,7 @@ func (db *database) Update(id uint32, user *models.User) (*models.User, error) {
 }
 
 func (db *database) Delete(id uint32) (int64, error) {
-	rs := db.conn.Debug().Select("id").Take(&models.User{}, id).Delete(&models.User{})
+	rs := db.conn.Select("id").Take(&models.User{}, id).Delete(&models.User{})
 	if errors.Is(rs.Error, gorm.ErrRecordNotFound) {
 		return 0, echo.ErrNotFound
 	}
