@@ -6,7 +6,7 @@ Simple API REST con Go, Echo (framework), GORM (ORM), PostgreSQL para CRUD de do
 
 1. Clonar el proyecto.
 
-2. Crear archivo **.env** con las siguientes variables:
+2. Crear archivo `.env` con las siguientes variables:
 ```
 API_PORT =
 
@@ -21,7 +21,7 @@ DB_PWD =
 3. Configurar la base de datos.
 
 4. Ejecutar el servidor local:
-```
+```bash
 // -rt para crear las tablas e insertar los datos de prueba
 go run server.go -rt
 
@@ -34,6 +34,4 @@ go run server.go
 **Luis Guillermo Gómez**  
 - [Github](https://github.com/luisgomez29)
 
-```
-Gracias!.
-```
+`Gracias!.`
