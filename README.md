@@ -22,11 +22,11 @@ DB_PWD =
 
 4. Ejecutar el servidor local:
 ```bash
-// -rt para crear las tablas e insertar los datos de prueba
-go run server.go -rt
+# -rt para crear las tablas e insertar los datos de prueba
+go run main.go -rt
 
-// Ejecutar servidor sin crear tablas e insertar datos
-go run server.go
+# Ejecutar servidor sin crear tablas e insertar datos
+go run main.go
 ```
 
 ## Autor

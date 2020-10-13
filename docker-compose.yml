@@ -14,3 +14,8 @@ services:
       POSTGRES_PASSWORD: ${DB_PWD}
     ports:
       - "5432:5432"
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+
+volumes:
+  dbdata:
