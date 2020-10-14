@@ -9,11 +9,11 @@ import (
 )
 
 type UserController interface {
-	GetAll(c echo.Context) error
-	FindById(c echo.Context) error
-	Create(c echo.Context) error
-	Update(c echo.Context) error
-	Delete(c echo.Context) error
+	GetAll(echo.Context) error
+	FindById(echo.Context) error
+	Create(echo.Context) error
+	Update(echo.Context) error
+	Delete(echo.Context) error
 }
 
 type userController struct {
