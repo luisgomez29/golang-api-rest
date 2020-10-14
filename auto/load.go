@@ -8,12 +8,13 @@ import (
 )
 
 func Load(db *gorm.DB) {
-	err := db.Migrator().DropTable(&models.User{}, &models.Product{})
+	mdl := []interface{}{&models.User{}, &models.Product{}}
+	err := db.Migrator().DropTable(mdl...)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = db.AutoMigrate(&models.User{}, &models.Product{})
+	err = db.AutoMigrate(mdl...)
 	if err != nil {
 		log.Fatal(err)
 	}
