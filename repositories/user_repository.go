@@ -32,7 +32,7 @@ func (db *database) All() ([]*models.User, error) {
 
 func (db *database) FindById(id uint32) (*models.User, error) {
 	u := new(models.User)
-	fields := utils.Fields(&models.User{})
+	fields := utils.Fields(u)
 	if err := db.conn.Select(fields).Take(u, id).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, echo.ErrNotFound
 	}

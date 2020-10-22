@@ -7,6 +7,7 @@ import (
 	"github.com/luisgomez29/golang-api-rest/config"
 	"github.com/luisgomez29/golang-api-rest/controllers"
 	"github.com/luisgomez29/golang-api-rest/database"
+	"github.com/luisgomez29/golang-api-rest/middlewares"
 	"github.com/luisgomez29/golang-api-rest/repositories"
 	"github.com/luisgomez29/golang-api-rest/routes"
 )
@@ -34,8 +35,13 @@ func main() {
 	productController := controllers.NewProductController(productRepository, userRepository)
 	productRouter := routes.NewProductRouter(productController)
 
+	loginController := controllers.NewAuthController(db)
+	loginRouter := routes.NewAuthRouter(loginController)
+
 	e := echo.New()
 	apiV1 := e.Group("/api/v1/")
-	routes.InitRoutes(apiV1, userRoutes, productRouter)
+	apiV1.Use(middlewares.Authenticated())
+
+	routes.InitRoutes(apiV1, userRoutes, productRouter, loginRouter)
 	e.Logger.Fatal(e.Start(config.PORT))
 }

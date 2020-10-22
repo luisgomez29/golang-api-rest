@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
+	"github.com/luisgomez29/golang-api-rest/auth"
 	"github.com/luisgomez29/golang-api-rest/models"
 	"github.com/luisgomez29/golang-api-rest/repositories"
 	"net/http"
@@ -25,6 +27,8 @@ func NewUserController(userRepository repositories.UserRepository) UserControlle
 }
 
 func (ctl userController) GetAll(c echo.Context) error {
+	s := auth.UserIDFromToken(c)
+	fmt.Printf("USR => %v\n", s)
 	users, err := ctl.userRepository.All()
 	if err != nil {
 		return err

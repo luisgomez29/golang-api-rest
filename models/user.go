@@ -12,7 +12,7 @@ type User struct {
 	LastName  string     `gorm:"not null;size:40;" json:"last_name,omitempty"`
 	FullName  string     `gorm:"-" json:"full_name,omitempty"`
 	Email     string     `gorm:"not null;size:60;unique" json:"email,omitempty"`
-	Password  string     `gorm:"not null;size:128" json:"-"`
+	Password  string     `gorm:"not null;size:128" json:"password,omitempty"`
 	CreatedAt *time.Time `gorm:"not null;default:now()" json:"created_at,omitempty"`
 	UpdatedAt *time.Time `gorm:"not null;default:now()" json:"updated_at,omitempty"`
 	Products  []Product  `gorm:"constraint:OnDelete:CASCADE" json:"products,omitempty"`
