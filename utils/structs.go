@@ -11,8 +11,7 @@ func Fields(model interface{}, args ...string) []string {
 	for i := 0; i < e.NumField(); i++ {
 		field := e.Type().Field(i)
 		kind := field.Type.Kind()
-		if field.Tag.Get("json") == "-" || field.Tag.Get("gorm") == "-" || kind == reflect.Struct ||
-			kind == reflect.Slice || Includes(args, field.Name) {
+		if field.Tag.Get("gorm") == "-" || kind == reflect.Struct || kind == reflect.Slice || Includes(args, field.Name) {
 			continue
 		}
 		fields = append(fields, field.Name)

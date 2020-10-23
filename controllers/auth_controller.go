@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/luisgomez29/golang-api-rest/auth"
 	"github.com/luisgomez29/golang-api-rest/models"
+	"github.com/luisgomez29/golang-api-rest/utils"
 	"gorm.io/gorm"
 	"net/http"
 )
@@ -36,8 +37,8 @@ func (db *loginDB) Login(c echo.Context) error {
 		return err
 	}
 	user := new(models.User)
-	//fields := utils.Fields(user)
-	if err := db.conn.Debug().Where("email = ?", u.Email).Take(user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	fields := utils.Fields(user)
+	if err := db.conn.Select(fields).Where("email = ?", u.Email).Take(user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return echo.NewHTTPError(http.StatusUnauthorized, "invalid email")
 	}
 	if err := auth.VerifyPassword(user.Password, u.Password); err != nil {

@@ -26,13 +26,13 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 
 func (db *database) All() ([]*models.User, error) {
 	var users []*models.User
-	db.conn.Select(utils.Fields(&models.User{})).Limit(100).Find(&users)
+	db.conn.Debug().Select(utils.Fields(&models.User{}, "Password")).Limit(100).Find(&users)
 	return users, nil
 }
 
 func (db *database) FindById(id uint32) (*models.User, error) {
 	u := new(models.User)
-	fields := utils.Fields(u)
+	fields := utils.Fields(u, "Password")
 	if err := db.conn.Select(fields).Take(u, id).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, echo.ErrNotFound
 	}
@@ -45,6 +45,7 @@ func (db *database) Create(user *models.User) (*models.User, error) {
 		return nil, echo.ErrInternalServerError
 	}
 	user.FullName = user.FirstName + " " + user.LastName
+	user.Password = ""
 	return user, nil
 }
 
