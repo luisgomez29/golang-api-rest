@@ -6,6 +6,11 @@ services:
       - "8080:8080"
     depends_on:
       - db
+    command: bash -c "
+      while !</dev/tcp/db/5432; do sleep 1; done;
+      ./main -rt
+      "
+
   db:
     image: postgres
     environment:

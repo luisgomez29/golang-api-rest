@@ -13,6 +13,7 @@ API_PORT =
 # DATABASE CONFIG
 
 HOST =
+DB_PORT =
 DB_NAME =
 DB_USER =
 DB_PWD =
@@ -28,6 +29,10 @@ go run main.go -rt
 # Ejecutar servidor sin crear tablas e insertar datos
 go run main.go
 ```
+5. Ingresar en el navegador a la siguiente URL (revisar que el puerto sea igual al definido en el archivo `.env`):
+
+
+    http://localhost:8000/api/v1/users
 
 ## Autor
 
